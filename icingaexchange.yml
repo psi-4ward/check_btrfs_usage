@@ -1,0 +1,17 @@
+name: check_btrfs_usage
+description: "file:///README.md"
+url: "https://github.com/psi-4ward/check_btrfs_usage"
+tags: btrfs,disk,usage
+vendor: Psi
+target: Storage
+type: Plugin
+license: MIT
+releases:
+  -
+    name: 1.0
+    description: "1.0"
+    files:
+      -
+        name: check_btrfs_usage.sh
+        url: "file:///check_btrfs_usage.sh"
+        description: none

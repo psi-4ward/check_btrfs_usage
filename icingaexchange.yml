@@ -15,3 +15,4 @@ releases:
         name: check_btrfs_usage.sh
         url: "file:///check_btrfs_usage.sh"
         description: none
+        checksum: abe4291a59f0a07d5a93fdf1dbf5c774

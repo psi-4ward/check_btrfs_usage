@@ -9,8 +9,8 @@
 
 set -e
 
-WARN=10000
-CRIT=5000
+WARN=10
+CRIT=5
 MOUNT="/"
 
 STATE_OK=0
@@ -51,19 +51,22 @@ export LC_ALL=C
 FREE_MB=$(btrfs fi usage $MOUNT -m | grep -F "estimated" | awk '{match($0,"min: ([0-9]+)",a)}END{print a[1]}')
 USED_MB=$(btrfs fi usage $MOUNT -m | grep -F "    Used" | awk '{match($0,"([0-9]+)",a)}END{print a[1]}')
 SUM_MB=$(($USED_MB + $FREE_MB))
-
+WARN_MB=$(($SUM_MB*$WARN/100))
+CRIT_MB=$(($SUM_MB*$CRIT/100))
 EXIT_STATE=${STATE_OK}
 
-if [ ${FREE_MB} -lt ${CRIT} ] ; then
+if [ $FREE_MB -lt $CRIT_MB ] ; then
   EXIT_STATE=${STATE_CRITICAL}
   echo -n "CRITICAL "
-elif [ $FREE_MB -lt $WARN ] ; then
+elif [ $FREE_MB -lt $WARN_MB ] ; then
   echo -n "WARNING "
   EXIT_STATE=${STATE_WARNING}
 fi
 
-echo "Free: ${FREE_MB}MiB"
-echo "Used: ${USED_MB}MiB"
+echo "Free: ${FREE_MB}MB"
+echo "Warning threshold: ${WARN_MB}MB "
+echo "Critical threshold: ${CRIT_MB}MB"
+echo "Used: ${USED_MB}MB"
 echo " | Used=${USED_MB}MB;0;0;0;${SUM_MB} Free=${FREE_MB}MB;${WARN};${CRIT};${SUM_MB};0"
 
 exit ${EXIT_STATE}
